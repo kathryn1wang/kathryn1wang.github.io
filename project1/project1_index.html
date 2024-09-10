@@ -7,12 +7,161 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        p {
+            font-size: 18px;
+        }
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 1;
+            text-align: center;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <h1>Project 1!</h1>
     <h2>Approach 1: Naive Approach</h2>
-    <p> I used a naive approach that loops over possible (x,y) displacements from -15 to 15 in each axis. The displacements were performed by using np.roll. I initially used l2 loss.</p>
-    <img src="images/cathedral_aligned_l2" alt="Cathedral aligned using l2 loss">
+    <p> I used a naive approach that loops over possible (x,y) displacements from -15 to 15 in each axis. 
+        The displacements were performed by using np.roll. I tried this approach using 3 different losses. 
+        L2 loss and normalized cross correlation were recommended by the assignment, but I got the best results
+        using structural similarity, which I found worked well for projects in past years. For cathedral.jpg using negative structural similarity
+        as my loss, the optimal displacements found were Green Displacement = 5, 2 and Red Displacement = 12, 3. /p>
+    <div class="row">
+        <div class="column">
+            <h3>L2 Loss</h3>
+            <img src="images/cathedral_aligned_l2.jpg" alt="Cathedral aligned using l2 loss">
+        </div>
+        <div class="column">
+            <h3>Negative Normalized Cross-Correlation (NCC)</h3>
+            <img src="images/cathedral_aligned_ncc.jpg" alt="Cathedral aligned using ncc loss">
+        </div>
+        <div class="column">
+            <h3>Negative Structural Similarity Loss</h3>
+            <img src="images/cathedral_aligned_ss.jpg" alt="Cathedral aligned using ss loss">
+        </div>
+    </div>
+
+    <h2>Approach 2: Pyramid Approach</h2>
+    <p> I used a recursive implementation to execute the pyramid approach and optimize the search process. 
+        At each call, the recursive function will call itself on the image downsized by 1/2. This returns the 
+        optimal displacement for the downsized image (x, y). Then we rescale this to 2x and 2y and search 
+        for the optimal displacement in a x-10 to x+10 and y-10 to y+10 window. </p>
+    <div class="row">
+        <div class="column">
+            <h3>Emir</h3>
+            <i>emir.tif Green Displacement = 50, 21
+            <br>emir.tif Red Displacement = 105, 40</i>
+            <img src="images/emir_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Church</h3>
+            <i>church.tif Green Displacement = 25, 4<br>
+                church.tif Red Displacement = 58, -4</i>
+            <img src="images/church_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Harvesters</h3>
+            <i>harvesters.tif Green Displacement = 59, 14<br>
+                harvesters.tif Red Displacement = 122, 11</i>
+            <img src="images/harvesters_ss.jpg">
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <h3>Icon</h3>
+            <i>icon.tif Green Displacement = 39, 16<br>
+                icon.tif Red Displacement = 89, 23</i>
+            <img src="images/icon_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Lady</h3>
+            <i>lady.tif Green Displacement = 57, 8<br>
+                lady.tif Red Displacement = 120, 12</i>
+            <img src="images/lady_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Melons</h3>
+            <i>melons.tif Green Displacement = 88, 10<br>
+                melons.tif Red Displacement = 178, 12</i>
+            <img src="images/melons_ss.jpg">
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <h3>Monastery</h3>
+            <i>monastery.jpg Green Displacement = -3, 2<br>
+                monastery.jpg Red Displacement = 3, 2</i>
+            <img src="images/monastery_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Onion Church</h3>
+            <i>onion_church.tif Green Displacement = 52, 23<br>
+                onion_church.tif Red Displacement = 108, 35</i>
+            <img src="images/onion_church_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Self Portrait</h3>
+            <img src="images/self_portrait_ss.jpg">
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <h3>Tobolsk</h3>
+            <i>tobolsk.jpg Green Displacement = 3, 2<br>
+                tobolsk.jpg Red Displacement = 6, 3</i>
+            <img src="images/tobolsk_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Train</h3>
+            <i>train.tif Green Displacement = 41, 1<br>
+                train.tif Red Displacement = 85, 29</i>
+            <img src="images/train_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Three Generations</h3>
+            <i>three_generations.tif Green Displacement = 57, 15<br>
+            three_generations.tif Red Displacement = 112, 9</i>
+            <img src="images/three_generations_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>Sculpture</h3>
+            <i>sculpture.tif Green Displacement = 33, -11<br>
+                sculpture.tif Red Displacement = 140, -27</i>
+            <img src="images/sculpture_ss.jpg">
+        </div>
+    </div>
+    
+
+    <h2> Bells and Whistles </h2>
+    <p> I noticed that on some images, particularly on melons.tif, some parts of the image were very dark and lacked contrast. 
+        I applied automatic contrasting that rescales the pixel values of each channel to 0 to 1. We can see that this makes some parts,
+        such as the man's face in the melons image, much clearer. I also tried this technique on Emir and saw more clarity in the face.</p>
+    <div class="row">
+        <div class="column">
+            <h3>Without Contrasting</h3>
+            <img src="images/melons_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>With Contrasting</h3>
+            <img src="images/melons_contrasted.jpg">
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <h3>Without Contrasting</h3>
+            <img src="images/emir_ss.jpg">
+        </div>
+        <div class="column">
+            <h3>With Contrasting</h3>
+            <img src="images/emir_contrasted.jpg">
+        </div>
+    </div>
 </body>
 </html>
