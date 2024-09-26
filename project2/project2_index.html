@@ -37,12 +37,22 @@
     <h3>Part 1.1 - Finite Difference Operator</h3>
     <img src="images/part1.1.png" class="center" width= 100%>
     <img src="images/part1.1_final.png" class="center" width= 30%>
+    <p>The gradient of an image represents the rate at which the intensity values change. This is basically highlighting the edges within the image. 
+        To compute the gradient magnitude, we first calculate the partial derivatives of the image with respect to the x and y directions. 
+        We do this by convolving the image with the finite difference operators. 
+        After we get the partial derivates, we calculate the gradient magnitude at each pixel by taking the euclidean norm.</p>
 
     <h3>Part 1.2 - Derivative of Gaussian (DoG) Filter</h3>
     <img src="images/smoothed_partials.png" class="center" width= 100%>
     <img src="images/smoothed_edge.png" class="center" width= 30%>
     <img src="images/dog_filter.png" class="center" width= 50%>
     <img src="images/dog_partial.png" class="center" width= 100%>
+    <p>Applying finite difference operators directly to the image results in a noisy gradient magnitude image due to sensitivity to noise.
+        Pre-smoothing the image with a Gaussian filter reduces noise. This lets us have cleaner edge detection in the gradient magnitude image.
+        Using DoG filters combines smoothing and differentiation in one step. 
+        The equivalence of the two methods shows us the associative property of convolution. 
+        It also demonstrates the effectiveness of DoG filters in edge detection tasks!
+    </p>
 
     
 
@@ -103,7 +113,7 @@
     <img src="images/harry_hermoine_fft.png" class="center">
 
     <h3> Other Results </h3>
-    <img src="images/Figure_sigma_4.png" class="center" width= 100%>
+    <img src="images/derek_nutmeg.png" class="center" width= 100%>
     <img src="images/luffy_zoro.png" class="center">
 
     <h3> Failed Result </h3>
