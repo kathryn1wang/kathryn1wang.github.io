@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        p {
+            font-size: 25px;
+        }
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 1;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: au
+            to;
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project 2 - Fun with Filters and Frequencies!</h1>
+    <h2>Kathryn Wang</h2>
+    <h3>Part 1.1 - Finite Difference Operator</h3>
+    <img src="images/part1.1.png" class="center" width= 100%>
+    <img src="images/part1.1_final.png" class="center" width= 30%>
+
+    <h3>Part 1.2 - Derivative of Gaussian (DoG) Filter</h3>
+    <img src="images/smoothed_partials.png" class="center" width= 100%>
+    <img src="images/smoothed_edge.png" class="center" width= 30%>
+    <img src="images/dog_filter.png" class="center" width= 50%>
+    <img src="images/dog_partial.png" class="center" width= 100%>
+
+    
+
+    <h3>Part 2.1 - Image "Sharpening"</h3>
+    <img src="images/sharpened_1.png" class="center" width= 50%>
+        
+    <div class="row">
+        <div class="column">
+            <h4> Original Image </h4>
+            <img src="images/taj.jpg" width = 80%>
+        </div>
+        <div class="column">
+            <img src="images/sharpened_k_0.5.png">
+        </div>
+        <div class="column">
+            <img src="images/sharpened_k_1.0.png">
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <img src="images/sharpened_k_1.5.png">
+        </div>
+        <div class="column">
+            <img src="images/sharpened_k_2.0.png">
+        </div>
+    </div>
+
+    <h2> Evaluation </h2>
+    <p> Now, to evaluate the sharpening algorithm, I blurred a sharp image and then resharpened it. 
+        By comparing the sharpened image and the original image, we can have a sense of reconstruction loss.</p>
+
+    <div class="row">
+        <div class="column">
+            <img src="images/original_sharp_image.png">
+        </div>
+        <div class="column">
+            <img src="images/blurred_image.png">
+        </div>
+        <div class="column">
+            <img src="images/sharpened_sea_image.png">
+        </div>
+    </div>
+
+    <p> Although the colors are more contrasted, there is a lack of detail and clairty in the resharpened image. From afar, 
+        it looks pretty similar to the original image and certainly "sharper" than the blurred image with brighter colors. However, there is a noticeable reconstruction loss in the resharpened image. 
+    </p>
+    
+    
+    <h3>Part 2.2 - Hybrid Images</h3>
+
+    <h3> Favorite Result </h3>
+    <img src="images/harry_hermoine.png" class="center" width= 100%>
+    <p> From further away: </p>
+    <img src="images/harry_hermoine_image.png" class="center" width= 5%>
+    <p> Close up: </p>
+    <img src="images/harry_hermoine_image.png" class="center" width= 50%>
+    <p> Fourier Analysis: </p>
+    <img src="images/harry_hermoine_fft.png" class="center">
+
+    <h3> Other Results </h3>
+    <img src="images/Figure_sigma_4.png" class="center" width= 100%>
+    <img src="images/luffy_zoro.png" class="center">
+
+    <h3> Failed Result </h3>
+    <p> I believe this one didn't work well because the images were seemingly too similar. 
+        The only difference you can really see at low frequencies is the smile. </p>
+    <img src="images/kathryn_frequencies.png" class="center" width= 100%>
+
+
+    <h3>Part 2.3 - Gaussian and Laplacian Stacks </h3>
+    <p> First construct the gaussian stack for each image and then use the difference between the gaussian layers to construct the laplacian stacks: </p>
+    <img src="images/gstack_apple.png" class="center" width= 80%>
+    <img src="images/lstack_apple.png" class="center" width= 80%>
+    <img src="images/gstack_orange.png" class="center" width= 80%>
+    <img src="images/lstack_orange.png" class="center" width= 80%>
+    <p> Then we apply create a gaussian stack of the mask, and put it all together to blend the images:</p>
+    <img src="images/blended_oraple.png" class="center" width= 30%>
+
+    <h2>Part 2.4 - Multiresolution Blending </h2>
+    <h2> Oraple - Vertical Mask </h2>
+    <div class="row">
+        <div class="column">
+            <h4> Image 1 </h4>
+            <img src="images/apple.jpeg">
+        </div>
+        <div class="column">
+            <h4> Image 2 </h4>
+            <img src="images/orange.jpeg">
+        </div>
+        <div class="column">
+            <img src="images/blended_oraple.png"%>
+        </div>
+    </div>
+
+    <h2> Day and Night - Horizontal Mask </h2>
+    <div class="row">
+        <div class="column">
+            <h4> Image 1 </h4>
+            <img src="images/day.jpeg">
+        </div>
+        <div class="column">
+            <h4> Image 2 </h4>
+            <img src="images/night.jpeg">
+        </div>
+        <div class="column">
+            <h4> Blended Image </h4>
+            <img src="images/day_and_night_vertical2.png"%>
+        </div>
+    </div>
+    
+    <h2> Day and Night - Horizontal Mask 2</h2>
+    <div class="row">
+        <div class="column">
+            <h4> Image 1 </h4>
+            <img src="images/night.jpg" width= 80%>
+        </div>
+        <div class="column">
+            <h4> Image 2 </h4>
+            <img src="images/day.jpg" width= 80%>
+        </div>
+        <div class="column">
+            <h4> Blended Image </h4>
+            <img src="images/day_and_night_hybrid1.png" width= 80%>
+        </div>
+    </div>
+
+    <h2> Unicorn - Circular Mask</h2>
+    <div class="row">
+        <div class="column">
+            <h4> Image 1 </h4>
+            <img src="images/doorway.png" width= 80%>
+        </div>
+        <div class="column">
+            <h4> Image 2 </h4>
+            <img src="images/unicorn.jpg" width= 80%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <h4> Doorway Masked </h4>
+            <img src="images/doorway_masked.png" width= 80%>
+        </div>
+        <div class="column">
+            <h4> Unicorn Masked </h4>
+            <img src="images/unicorn_masked.png" width= 80%>
+        </div>
+    </div>
+    <p> A portal with a unicorn was the original intention, but you can see the blending ability better with a larger radius. </p>
+    <div class="row">
+        <div class="column">
+            <h4> Blended </h4>
+            <img src="images/unicorn_blended_smaller_radius.png" width= 80%>
+        </div>
+        <div class="column">
+            <h4> Blended with Larger Radius </h4>
+            <img src="images/unicorn_blended_large_radius.png" width= 80%>
+        </div>
+    </div>
+    
+
+</body>
+</html>
