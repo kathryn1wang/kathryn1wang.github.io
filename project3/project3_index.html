@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        p {
+            font-size: 16px;
+        }
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 1;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: au
+            to;
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project 3: Face Morphing</h1>
+    <h2>Kathryn Wang</h2>
+    <h2>Part 1: Defining Correspondences</h2>
+    <h2 style="text-align: center;"> Delaunay Triangulation  </h2>
+    <p style="text-align: center;">  circles mark the facial landmarks.  </p>
+    <div class="row">
+        <div class="column">
+            <img src="images/imageA_triangulation.png">
+        </div>
+        <div class="column">
+            <img src="images/imageB_triangulation.png">
+        </div>
+    </div>
+    <p> I added boundary points at the edges of the image to my landmarks and
+        passed the average of the two sets of landmark points into the scipy.spatial.Delaunay
+        function to obtain the triangulations. </p>
+    
+    <h2>Part 2: Computing the "Mid-way Face"</h2>
+    <div class="row">
+        <div class="column">
+            <p> My selfie </p>
+            <img src="images/kathryn_selfie_resized.jpeg" class="center" width= 50%>
+        </div>
+        <div class="column">
+            <p> Taylor Swift </p>
+            <img src="images/taylor_swift_resized.jpg" class="center" width= 50%>
+        </div>
+        <div class="column">
+            <p> Midway Face </p>
+            <img src="images/midway_face.png" class="center" width= 50%>
+        </div>
+    </div>
+    <p> In this part, I computed a mid-way face between my selfie and a picture of Taylor Swift. 
+        First, I computed the average shape. I averaged the landmark points of my face and Taylor Swift's face to get an intermediate shape.
+        Second, I warped both faces to the average shape, using the affine transformations for each triangle. 
+        This involves mapping every pixel within each triangle in the original image to a corresponding pixel in the new shape.
+        Third, I blended the colors. Once both faces were warped to the intermediate shape, I averaged their pixel values to get the mid-way face.
+    </p>
+
+    <h2>Part 3: The Morph Sequence</h2>
+    <img src="images/morph_sequence.gif" class="center" width= 50%>
+    <p> The morph sequence transforms between two images using the parameters warp fraction and dissolve fraction. 
+        Warp controls the shape transformation. When the warp fraction is 0, the shape corresponds to my face. 
+        When it's 1, it corresponds to Taylor Swift's face. Values in the middle give me a blend of both.
+        Dissolve controls the blending of the pixel colors. 
+        I used linear interpolation to gradually adjust the warp and dissolve fractions to get a smooth transition from my face to Taylor's.
+    </p>
+
+    <h2>Part 4: The "Mean face" of a population</h2>
+    <p> In this part, I computed the mean face of the FEI Face Database, which gave me 400 smiling and non-smiling images with their landmark annotations.
+        I computed the average shape of all the faces in the dataset. Then, I warped each face in the dataset to the average shape using affine transformations.
+        After warping, I averaged the pixel values of the warped faces to get the mean face.
+        Next, I warped my face to the average shape of the population to see how my facial geometry aligns with the mean geometry.
+        Finally, I warped the mean face to my own face shape geometry.
+        I only used the non-smiling images in the dataset because my own image is non-smiling. These were easy to filter out from the dataset because all of the images came in pairs.
+    </p>
+    <img src="images/part4.1_v2.png" class="center">
+    <div class="row">
+        <div class="column">
+            <p> My Selfie (cropped and resized to match dataset)</p>
+            <img src="images/selfie_pt4_resized.jpeg" class="center" width= 50%>
+        </div>
+        <div class="column">
+            <p> Average face </p>
+            <img src="images/pt4.2_v2.png" class="center" width= 50%>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <p> My face warped to average geometry</p>
+            <img src="images/my_face_warped.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            <p> Average face warped to my geometry</p>
+            <img src="images/warped_average_face.png" class="center" width= 50%>
+        </div>
+    </div>
+
+    <h2>Part 5: Caricatures: Extrapolating from the mean</h2>
+    <img src="images/caricature1.png" class="center" width = 30%>
+    <p> As instructed, I calculated caricature landmarks by extrapolating my facial landmarks 
+        away from the average shape. I used the formula CaricatureLandmarks=alpha * AverageShape + (1-alpha)* MyLandmarks
+        with alpha below 0 or above 1.
+        This exaggerates the difference between my face and the average face of the dataset. </p>
+
+    <h2> Bells and Whistles </h2>
+    <p> I sequentially applied the morphing algorithm to a series of photos of me from young to old. It produces 46 images per transition.
+        I added music to it using iMovie.
+        I defined my facial landmarks using the dlib library, so I wouldn't have to do them one by one. Dlib uses ML (ie. CNNs) to detect
+        68 key facial landmarks on faces in an image. I previously used dlib in a past 
+        facial recognition project my freshman year at Carnegie Mellon. I thought it would be cool to 
+        reuse the library in this context.</p>
+    <h2 style="text-align: center;"> B&W #2: Kathryn's Face Over Time </h2>
+    <img src="images/young_to_steph.gif" class="center" width = 30%>
+    <h2 style="text-align: center;"> with music, accessible by berkeley email: https://drive.google.com/file/d/1LvdgYEcbk8fosFW60_KngLTOwO1Ibu-B/preview</h2>
+    <iframe src="https://drive.google.com/file/d/1LvdgYEcbk8fosFW60_KngLTOwO1Ibu-B/preview" width="640" height="480" allow="autoplay" class="center"></iframe>
+    
+
+</body>
+</html>
