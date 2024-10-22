@@ -47,12 +47,17 @@
             <img src="imgs/rectified_coaster.jpg" class="center" width= 75%>
         </div>
     </div>
-    <p> FILL IN </p>
+    <p> In my image warping and rectification approach, I manually define point correspondences between images and compute a homography matrix using least squares. 
+        This homography allows me to transform one image into the perspective of another. 
+        I construct a mapping matrix and using interpolation, I warp the entire image. I also compute 
+        the updated image size for the warping. </p>
 
 
 
 
     <h2>Part 3: Image Mosaic</h2>
+    <p> For blending images into a mosaic, I use a simple weighted averaging technique to combine overlapping regions. After warping images to align within a larger canvas, each pixel is assigned a weight based on its visibility in the respective source images. 
+        The weights are calculated such that overlapping areas contribute equally to the final result. This basic approach results in a somewhat smooth mosaic.</p>
     <div class="row">
         <div class="column">
             <img src="imgs/image1.jpg" class="center" width= 75%>
