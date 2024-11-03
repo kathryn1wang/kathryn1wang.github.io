@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        p {
+            font-size: 24px;
+        }
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 1;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: au
+            to;
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project 4: IMAGE WARPING and MOSAICING</h1>
+    <h2>Kathryn Wang</h2>
+    <h1>PART A</h1>
+    <h2> Image Rectification</h2>
+
+    <p> I needed to find the homography H such that p' = Hp, where p and p' are corresponding
+        points in 2 images.  I set up a system of equations derived from the homography relation. 
+        For each point correspondence, I formulated two equations based on the relationship.
+        I used least-squares to solve for H. 
+
+        I moved on to warping one image to align it with the other. 
+        This involved applying the homography to the pixels of the image. 
+        I performed inverse warping to avoid holes in the output image. 
+        In inverse warping, I mapped pixels in the output image back to the source image using the inverse homography.
+
+        I used interpolation during the warping process. 
+        Since the transformed coordinates might not align exactly with pixel grids, 
+        I used bilinear interpolation to estimate pixel values at non-integer coordinates.
+    </p>
+
+    <img src="imgs/rectification_points.png" class="center" width= 50%>
+    <img src="imgs/rectified_picasso.jpg" class="center" width= 50%>
+
+    <h2 style="text-align: center;">Rectifying coaster to square </h2>
+    <div class="row">
+        <div class="column">
+            <img src="imgs/resized_coasters.jpg" class="center" width= 75%>
+        </div>
+        <div class="column">
+            <img src="imgs/rectified_coaster.jpg" class="center" width= 75%>
+        </div>
+    </div>
+
+    <h2> Image Mosaic</h2>
+    <p> 
+        A big challenge in this step was determining the size of the output canvas for both images after warping transformations. 
+        To fix this, I transformed the corner points of the images using the homography and computed the bounding box that held all transformed points.
+
+        For blending images into a mosaic, I use a simple weighted averaging technique to combine overlapping regions.
+        The weights are calculated such that overlapping areas contribute equally to the final result. This basic approach results in a somewhat smooth mosaic.
+        For the second part of this project, I implemented the gradual alpha masking.
+    </p>
+    <div class="row">
+        <div class="column">
+            <img src="imgs/image1.jpg" class="center" width= 75%>
+        </div>
+        <div class="column">
+            <img src="imgs/image3.jpg" class="center" width= 75%>
+        </div>
+    </div>
+    <img src="imgs/result.jpg" class="center" width= 50%>
+
+
+    <div class="row">
+        <div class="column">
+            <img src="imgs/resized_yosemite_1.jpg" class="center" width= 75%>
+        </div>
+        <div class="column">
+            <img src="imgs/resized_yosemite_2.jpg" class="center" width= 75%>
+        </div>
+    </div>
+    <img src="imgs/result_yosemite.jpg" class="center" width= 50%>
+
+    <div class="row">
+        <div class="column">
+            <img src="imgs/resized_croatia1.jpg" class="center" width= 75%>
+        </div>
+        <div class="column">
+            <img src="imgs/resized_croatia2.jpg" class="center" width= 75%>
+        </div>
+    </div>
+    <img src="imgs/result_croatia.jpg" class="center" width= 50%>
+
+
+    <h1>PART B</h1>
+    <h2>Part 1: Detecting corner features in an image</h2>
+    <p> I opted to utilize provided code (harris.py) to expedite this step. 
+        I processed the images by loading and resizing them to manageable dimensions, which reduced computational load.
+        I also decided to tweak the parameters in harris.py to filter out some of the corners.
+        I increased sigma in corner_harris, and increased min_distance and set threshold_rel in peak_local_max.</p>
+    <div class="row">
+        <div class="column">
+            <img src="imgs_b/harris_corners_croatia1.jpg" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <img src="imgs_b/harris_corners_croatia2.jpg" class="center" width= 100%>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <img src="imgs_b/harris_corners_image1.jpg" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <img src="imgs_b/harris_corners_image3.jpg" class="center" width= 100%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <img src="imgs_b/harris_corners_yosemite.jpg" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <img src="imgs_b/harris_corners_yosemite2.jpg" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <img src="imgs_b/harris_corners_sunset.jpg" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <img src="imgs_b/harris_corners_sunset2.jpg" class="center" width= 100%>
+        </div>
+    </div>
+    <h2>Part 2: Extracting a Feature Descriptor for each feature point </h2>
+    <p> I extracted patches of size 40x40 pixels centered on each keypoint and then resized these patches to a standard size of 16x16 pixels.
+        I applied Gaussian blur to the patches to reduce high-frequency noise that could  affect matching. 
+        Additionally, I normalized each patch to have zero mean and unit variance to reduce the effects of illumination differences and contrast variations between images.
+    </p>
+    <h2>Part 3: Matching these feature descriptors between two images</h2>
+    <p> I implemented a feature matching algorithm based on Lowe's ratio test.
+        For each feature in the first image, I calculated the distances to all features in the second image. 
+        By comparing the closest and second-closest distances, I could determine if a match was significant.
+        A good match would have a closest distance that was a lot smaller than the second-closest one.
+    </p>
+    <img src="imgs_b/feature_matches_croatia1.jpg" class="center" width= 75%>
+    <img src="imgs_b/feature_matches_sunset.jpg" class="center" width= 75%>
+    <img src="imgs_b/feature_matches_image1.jpg" class="center" width= 75%>
+    <img src="imgs_b/feature_matches_yosemite.jpg" class="center" width= 75%>
+    <h2> Part 4: Use a robust method (RANSAC) to compute a homography </h2>
+    <p> The goal is to find the homography matrix that best maps points from the first image 
+        to corresponding points in the second image, that is also  robust to incorrect matches.
+        I implemented RANSAC by randomly selecting subsets of matched points to compute candidate homographies. 
+        For each candidate, I transformed the points from the first image using the homography and measured how well they aligned with the points in the second image. 
+        By counting the number of inliers, which are points that fit the homography within a certain tolerance, I identified the homography with the maximum number of inliers as the best estimate.
+        After computing the homography, I extracted the inlier matches based on this best estimate and plotted them to confirm their accuracy. 
+        We can see the number of matches slightly reduces post RANSAC.</p>
+    
+    <div class="row">
+        <div class="column">
+            <img src="imgs_b/ransac_matches_croatia1.jpg" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <img src="imgs_b/ransac_matches_sunset.jpg" class="center" width= 100%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <img src="imgs_b/ransac_matches_image1.jpg" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <img src="imgs_b/ransac_matches_yosemite.jpg" class="center" width= 100%>
+        </div>
+    </div>
+
+    <h2> Part 5: Produce a mosaic </h2>
+    <p>I calculated the size of the output mosaic by transforming the corners of the images using the homography and determining the combined dimensions. 
+        This also required adjusting the homography to account for any necessary translation so that that both images would fit properly into the mosaic space.
+        I implemented alpha blending using alpha masks. 
+        I created alpha masks for both images, where each mask had values that smoothly decreased from the center of the image to the edges. 
+        This helps to reduce the visible seams and gradually blends the images where they overlap.
+        I performed a weighted averaging by dividing the accumulated pixel values by the combined alpha mask.</p>
+    <img src="imgs_b/mosaic_blended_image1.jpg" class="center" width= 75%>
+    <img src="imgs_b/mosaic_blended_croatia1.jpg" class="center" width= 75%>
+    <img src="imgs_b/mosaic_blended_yosemite.jpg" class="center" width= 75%>
+    <img src="imgs_b/mosaic_blended_sunset.jpg" class="center" width= 75%>
+
+    <h2> Learnings </h2>
+    <p>
+    Throughout this project, I learned a lot of the complexities in feature detection, matching, and image transformation. 
+    One of the most memorable lessons is the importance of consistent coordinate handling. Early on, I came across issues where the images were being warped in unexpected directions. 
+    This was due to inconsistencies in how I was handling (x, y) and (y, x) coordinates in my code. 
+    Even small discrepancies in coordinate conventions can cause big errors, which requires meticulous attention to detail.
+    The coolest thing I learned was the power  of the RANSAC algorithm in computing homographies even with outliers. 
+    Implementing RANSAC and seeing it robustly estimate the correct transformation by selecting the inlier matches was very cool.
+    </p>
+</body>
+</html>
