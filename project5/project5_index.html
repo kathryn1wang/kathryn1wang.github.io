@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        p {
+            font-size: 24px;
+        }
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 1;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: au
+            to;
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 40px;
+            color:rgb(223, 198, 9);
+        }
+        h2 {
+            text-align: center;
+            font-size: 30px;
+            color:rgb(19, 116, 213);
+        }
+        h3 {
+            font-size: 24px;
+            color:rgb(0, 40, 109);
+        }
+        h4 {
+            font-size: 24px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project 5: Fun With Diffusion Models!</h1>
+    <h1>Kathryn Wang</h1>
+    <h2>PART A: The Power of Diffusion Models! </h2>
+    <h3> Part 1: Sampling Loops </h3>
+    <h3> 1.1 Implementing the Forward Process </h3>
+
+    <p> The forward process slowly adds noise to a clean image at each timesteps. 
+        This is used for training the model to reverse this addition of noise and generate new images.
+        Below you can see the forward diffusion process applied to the test image at timesteps 250, 500, and 750:
+    </p>
+    <div class="row">
+        <div class="column">
+            t = 250
+            <img src="imgs/parta/a_1.1_250.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            t = 500
+            <img src="imgs/parta/a_1.1_500.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            t = 750
+            <img src="imgs/parta/a_1.1_750.png" class="center" width= 25%>
+        </div>
+    </div>
+
+    <h3> 1.2 Classical Denoising </h3>
+    <p> We try to apply classical denoising using gaussian blur on images with different noise levels. 
+        We see that this method isn't very effective. 
+        Now we have some more motivation for implementing more advanced methods! </p>
+    
+    <div class="row">
+        <div class="column">
+            t = 250
+            <img src="imgs/parta/a_1.2_250.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            t = 500
+            <img src="imgs/parta/a_1.2_500.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            t = 750
+            <img src="imgs/parta/a_1.2_750.png" class="center" width= 25%>
+        </div>
+    </div>
+
+
+    <h3> 1.3 One-Step Denoising </h3>
+    <p>
+    Now, we use a pretrained diffusion model to denoise the images at different noise levels (t = 250, 500, 750). 
+    We estimate the noise in the image using the trained UNet and remove it from the noisy images using the given equation. 
+    Then we get an estimate of the original image!
+    Here are the one-step denoised images:
+    </p>
+    
+    Original image
+    <div class="row">
+        <div class="column">
+            t = 250
+            <img src="imgs/parta/a_1.3_250_1.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            t = 500
+            <img src="imgs/parta/a_1.3_500_1.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            t = 750
+            <img src="imgs/parta/a_1.3_750_1.png" class="center" width= 25%>
+        </div>
+    </div>
+    Noisy image
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/a_1.3_250_2.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/a_1.3_500_2.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/a_1.3_750_2.png" class="center" width= 25%>
+        </div>
+    </div>
+    Estimate of Original image
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/a_1.3_250_3.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/a_1.3_500_3.png" class="center" width= 25%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/a_1.3_750_3.png" class="center" width= 25%>
+        </div>
+    </div>
+
+    <h3> 1.4 One-Step Denoising </h3>
+    <p>
+    I implemented iterative denoising using the pretrained diffusion model. 
+    We apply the model repeatedly to remove noise at each timestep. 
+    We can see this approach outperforms one-step denoising and Gaussian blur.
+    Below are the results at every 5th loop using i_start = 10.
+    </p>
+    <div class="row">
+        <div class="column">
+            t = 10
+            <img src="imgs/parta/denoising_results/iterative_denoise_step_10.png" class="center" width= 75%>
+        </div>
+        <div class="column">
+            t = 15
+            <img src="imgs/parta/denoising_results/iterative_denoise_step_15.png" class="center" width= 75%>
+        </div>
+        <div class="column">
+            t = 20
+            <img src="imgs/parta/denoising_results/iterative_denoise_step_20.png" class="center" width= 75%>
+        </div>
+        <div class="column">
+            t = 25
+            <img src="imgs/parta/denoising_results/iterative_denoise_step_25.png" class="center" width= 75%>
+        </div>
+        <div class="column">
+            t = 30
+            <img src="imgs/parta/denoising_results/iterative_denoise_step_30.png" class="center" width= 75%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            Gaussian Blur Result
+            <img src="imgs/parta/denoising_results/gaussian_blur_image.png" class="center" width= 30%>
+        </div>
+        <div class="column">
+            One Step Denoise Result
+            <img src="imgs/parta/denoising_results/one_step_clean_image.png" class="center" width= 30%>
+        </div>
+        <div class="column">
+            Iterative Denoise Result
+            <img src="imgs/parta/denoising_results/iterative_clean_image.png" class="center" width= 30%>
+        </div>
+    </div>
+
+    <h3> 1.5 Diffusion Model Sampling </h3>
+    <p>
+    We can also denoise random noise to generate images with our diffusion model! Here are 5 samples of this:
+    </p>
+
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/part1.5_results/generated_image_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.5_results/generated_image_2.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.5_results/generated_image_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.5_results/generated_image_4.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.5_results/generated_image_5.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <h3> 1.6 Classifier Free Guidance </h3>
+    <p>
+    CFG allows us to control the conditioning on the prompt, resulting in higher quality images. 
+    We have unconditional and conditional noise estimates where unconditional noise estimates are using the empty prompt "".
+    Then we use the CFG formula to combine the two estimates! Here are 5 samples
+    </p>
+
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/part1.6_results/cfg_generated_image_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.6_results/cfg_generated_image_2.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.6_results/cfg_generated_image_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.6_results/cfg_generated_image_4.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/part1.6_results/cfg_generated_image_5.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <h3> 1.7 Image-to-image Translation </h3>
+    <p>
+    CFG lets us make edits to existing images by adding noise and then denoising them!
+    The amount of noise added helps determines the extent of the edits made. 
+    Therefore, we can make gradual edits to the images with varying noise levels. 
+    Below are the results of applying this ot image to image translation:
+    </p>
+
+
+    <div class="row">
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/1.7.1_results/original_test_image_step_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/1.7.1_results/original_test_image_step_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/1.7.1_results/original_test_image_step_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/1.7.1_results/original_test_image_step_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/1.7.1_results/original_test_image_step_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/1.7.1_results/original_test_image_step_20.png" class="center" width= 90%>
+        </div>
+    </div>
+    <h3>Here are the two custom images I selected.</h3>
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/butterfly1.jpg" class="center" width= 25%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/butterfly2.jpg" class="center" width= 25%>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/1.7.1_results/custom_test_image_2_step_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/1.7.1_results/custom_test_image_2_step_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/1.7.1_results/custom_test_image_2_step_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/1.7.1_results/custom_test_image_2_step_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/1.7.1_results/custom_test_image_2_step_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/1.7.1_results/custom_test_image_2_step_20.png" class="center" width= 90%>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/custom_test_image_1_step_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/custom_test_image_1_step_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/custom_test_image_1_step_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/custom_test_image_1_step_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/custom_test_image_1_step_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.7.1_results/custom_test_image_1_step_20.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <h3> 1.7.1 Editing Hand-Drawn and Web Images </h3>
+    <p>
+    Now we can use the same method of noising and denoising to project sketches and cartoons into realistic images!
+    </p>
+
+    <div class="row">
+        <div class="column">
+            web image
+            <img src="imgs/parta/web_image_results_1.7.1/web_image.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/web_image_results_1.7.1/step_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/web_image_results_1.7.1/step_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/web_image_results_1.7.1/step_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/web_image_results_1.7.1/step_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/web_image_results_1.7.1/step_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/web_image_results_1.7.1/step_20.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            drawing
+            <img src="imgs/parta/hand_drawn_image_2_results/drawing.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/hand_drawn_image_2_results/step_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/hand_drawn_image_2_results/step_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/hand_drawn_image_2_results/step_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/hand_drawn_image_2_results/step_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/hand_drawn_image_2_results/step_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/hand_drawn_image_2_results/step_20.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            drawing
+            <img src="imgs/parta/hand_drawn_image_1_results/drawing.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/hand_drawn_image_1_results/step_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/hand_drawn_image_1_results/step_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/hand_drawn_image_1_results/step_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/hand_drawn_image_1_results/step_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/hand_drawn_image_1_results/step_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/hand_drawn_image_1_results/step_20.png" class="center" width= 90%>
+        </div>
+    </div>
+
+
+    <h3> 1.7.2 Inpainting </h3>
+    <p>
+    Now we perform inpainting, reconstructing a masked part of an image using our diffusion model! 
+    I applied a binary mask on the region that we want to use the model to inpaint/edit, added noise to the masked area, and denoised it step by step.
+    </p>
+
+    <div class="row">
+        <div class="column">
+            original image
+            <img src="imgs/parta/1.7.2_results/campanile_original.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            mask
+            <img src="imgs/parta/1.7.2_results/campanile_mask.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            to replace
+            <img src="imgs/parta/1.7.2_results/campanile_to_replace.png" class="center" width= 50%>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            step = 0
+            <img src="imgs/parta/1.7.2_results/campanile_0.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            step = 5
+            <img src="imgs/parta/1.7.2_results/campanile_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            step = 10
+            <img src="imgs/parta/1.7.2_results/campanile_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 15
+            <img src="imgs/parta/1.7.2_results/campanile_15.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/1.7.2_results/campanile_20.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 25
+            <img src="imgs/parta/1.7.2_results/campanile_25.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 30
+            <img src="imgs/parta/1.7.2_results/campanile_30.png" class="center" width= 90%>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="column">
+            original image
+            <img src="imgs/parta/inpainting_results_1.7.2/image1/custom_image_1.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            mask
+            <img src="imgs/parta/inpainting_results_1.7.2/image1/mask_1.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            to replace
+            <img src="imgs/parta/inpainting_results_1.7.2/image1/to_replace_1.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            inpainted
+            <img src="imgs/parta/inpainting_results_1.7.2/image1/inpainted_custom_image_1.png" class="center" width= 50%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            original image
+            <img src="imgs/parta/inpainting_results_1.7.2/image2/custom_image.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            mask
+            <img src="imgs/parta/inpainting_results_1.7.2/image2/mask.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            to replace
+            <img src="imgs/parta/inpainting_results_1.7.2/image2/to_replace.png" class="center" width= 50%>
+        </div>
+        <div class="column">
+            inpainted
+            <img src="imgs/parta/inpainting_results_1.7.2/image2/inpainted.png" class="center" width= 50%>
+        </div>
+    </div>
+
+    <h3> 1.7.3 Text-Conditioned Image-to-image Translation </h3>
+    <p>
+    Now we add text guidance to image-to-image translation! I continue to use cfg to control the conditioning on the prompt.
+    </p>
+    <p>prompt = "a rocket ship"</p>
+    <div class="row">
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/1.7.3_results/test_image_istart_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/1.7.3_results/test_image_istart_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/1.7.3_results/test_image_istart_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/1.7.3_results/test_image_istart_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/1.7.3_results/test_image_istart_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/1.7.3_results/test_image_istart_20.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <p>prompt = an oil painting of a snowy mountain village</p>
+    <div class="row">
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/1.7.3_results/image1/istart_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/1.7.3_results/image1/istart_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/1.7.3_results/image1/istart_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/1.7.3_results/image1/istart_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/1.7.3_results/image1/istart_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/1.7.3_results/image1/istart_20.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <p>prompt = a photo of the amalfi cost</p>
+    <div class="row">
+        <div class="column">
+            i_start = 1
+            <img src="imgs/parta/1.7.3_results/image2/istart_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 3
+            <img src="imgs/parta/1.7.3_results/image2/istart_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 5
+            <img src="imgs/parta/1.7.3_results/image2/istart_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 7
+            <img src="imgs/parta/1.7.3_results/image2/istart_7.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 10
+            <img src="imgs/parta/1.7.3_results/image2/istart_10.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            i_start = 20
+            <img src="imgs/parta/1.7.3_results/image2/istart_20.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <h3> 1.8 Visual Anagrams </h3>
+    <p> 
+        To create visual anagrams, I used a diffusion model where an image appears as one object upright and a different object when flipped. 
+        I did this by the averaging noise estimates for the two text prompts before each reverse diffusion step. 
+        An important step I originally missed was doing the unconditional noise estimate for both upright and flipped.
+    </p>
+
+    <p>prompt1 = 'an oil painting of people around a campfire', prompt2 = 'an oil painting of an old man'</p>
+    <div class="row">
+        <div class="column">
+            upright
+            <img src="imgs/parta/1.8_results/anagram1/visual_anagram_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            flipped
+            <img src="imgs/parta/1.8_results/anagram1/visual_anagram_1_flipped.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            upright
+            <img src="imgs/parta/1.8_results/anagram1/visual_anagram_5.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            flipped
+            <img src="imgs/parta/1.8_results/anagram1/visual_anagram_5_flipped.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            upright
+            <img src="imgs/parta/1.8_results/anagram1/visual_anagram_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            flipped
+            <img src="imgs/parta/1.8_results/anagram1/visual_anagram_3_flipped.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <p>prompt1 = 'a lithograph of waterfalls', 
+        prompt2 = 'a lithograph of a skull'</p>
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram2/visual_anagram_3.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram2/visual_anagram_3_flipped.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram2/visual_anagram_2.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram2/visual_anagram_2_flipped.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram2/visual_anagram_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram2/visual_anagram_1_flipped.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <p>prompt1 = 'a photo of the amalfi cost', 
+        prompt2 = 'a photo of a dog'</p>
+    <div class="row">
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram3/visual_anagram_4.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram3/visual_anagram_4_flipped.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram3/visual_anagram_2.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram3/visual_anagram_2_flipped.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram3/visual_anagram_1.png" class="center" width= 90%>
+        </div>
+        <div class="column">
+            <img src="imgs/parta/1.8_results/anagram3/visual_anagram_1_flipped.png" class="center" width= 90%>
+        </div>
+    </div>
+
+    <h3> 1.9 Hybrid Images </h3>
+    <p> 
+        To create these hybrid images, I got the low and high frequencies from noise estimates conditioned on two different prompts. 
+        Low-pass filtering is applied to one prompt's noise estimate and high-pass filtering is applied to the other.
+        Then I average them into one noise estimate. 
+        As a result, the image looks different from close up vs. far!
+    </p>
+
+    <p>prompt1 = 'a photo of the amalfi cost', 
+        prompt2 = 'a photo of a dog'</p>
+    <img src="imgs/parta/1.9_results/prompt1/hybrid_result_1.png" class="center" width= 40%>
+    <div class="row">
+        <div class="column">
+            <p>prompt1 = 'a pencil', 
+                prompt2 = 'an oil painting of people around a campfire'</p>
+            <img src="imgs/parta/1.9_results/pencil_campfire.png" class="center" width= 60%>
+        </div>
+        <div class="column">
+            <p>prompt1 = 'a pencil', 
+                prompt2 = 'a rocket ship'</p>
+            <img src="imgs/parta/1.9_results/pencil_rocket.png" class="center" width= 60%>
+        </div>
+        <div class="column">
+            <p>prompt1 = 'an oil painting of a city landscape at night', 
+                prompt2 = 'a bookshelf of colorful books'</p>
+            <img src="imgs/parta/1.9_results/landscape_bookshelf.png" class="center" width= 60%>
+        </div>
+
+        <div class="column">
+            <p>prompt1 = 'a lithograph of a snake', 
+                prompt2 = 'a lithograph of waterfalls'</p>
+            <img src="imgs/parta/1.9_results/waterfall_snake.png" class="center" width= 60%>
+        </div>
+        <div class="column">
+            <p>prompt1 = 'a man with a hat', 
+                prompt2 = 'a realistic portrait of a cartoon bear'</p>
+            <img src="imgs/parta/1.9_results/bear_man_hat.png" class="center" width= 60%>
+        </div>
+    </div>
+
+    <h2>PART B: Diffusion Models from Scratch!</h2>
+    <h3>Part 1: Training a Single-Step Denoising UNet</h3>
+
+    <h3>Implementing the UNet, Using the UNet to Train a Denoiser, and Training </h3>
+    <h4> Noising Visualization</h4>
+    <img src="imgs/partb/unet_results/noising_visualization.png" class="center" width= 60%>
+    <img src="imgs/partb/unet_results/training_loss_curve.png" class="center" width= 50%>
+    <div class="row">
+        <div class="column">
+            <p> Epoch 1 Samples</p>
+            <img src="imgs/partb/unet_results/epoch_1_vis.png" class="center" width= 100%>
+        </div>
+        <div class="column">
+            <p> Epoch 5 Samples </p>
+            <img src="imgs/partb/unet_results/epoch_5_vis.png" class="center" width=100%>
+        </div>
+    </div>
+    <h4> Out of Distribution Results</h4>
+    <img src="imgs/partb/unet_results/out_of_distribution_results.png" class="center" width= 50%>
+
+    <h3>Part 2: Training a Diffusion Model</h3>
+    <h3> Adding Time Conditioning to UNet </h3>
+    <p> For the time-conditioned UNet, the UNet takes in a noisy image and a time step and learns to predict the noise added at that time step.
+        Like the previous step, the UNet consists of downsampling and upsampling blocks with skip connections. I used convolutional layers with GELU activations.
+        For the time-conditioning, I added two FCBlock modules to embed the time scalar into feature vectors that are added to the UNet.
+    </p>
+    <img src="imgs/partb/time_condition_results/training_loss_curve.png" class="center" width= 60%>
+    <div class="row">
+        <div class="column">
+            <h4> Epoch 5 Samples</h4>
+            <img src="imgs/partb/time_condition_results/full_samples_epoch_5.png" class="center" width= 75%>
+        </div>
+        <div class="column">
+            <h4> Epoch 20 Samples</h4>
+            <img src="imgs/partb/time_condition_results/full_sample_epoch_20.png" class="center" width=75%>
+        </div>
+    </div>
+
+    <h3> Adding Class Conditioning to UNet </h3>
+    <p>In this part, I train the UNet to condition on the class labels to generate specific digits. 
+        This requires adding class embeddings into the network and using classifier-free guidance during training and sampling.
+        I added two additional FCBlock modules to embed one-hot encoded class labels.
+        As instructed, I added masking so that the class conditioning is dropped 10% of the time during training 
+        so we can also have unconditional generation.
+    </p>
+    <img src="imgs/partb/class_condition_results/cc_training_loss_curve.png" class="center" width= 60%>
+    <div class="row">
+        <div class="column">
+            <h2> Epoch 5 Samples</h2>
+            <img src="imgs/partb/class_condition_results/sample_epoch_5.png" class="center" width= 40%>
+        </div>    
+        <div class="column">
+            <h2> Epoch 20 Samples</h2>
+            <img src="imgs/partb/class_condition_results/sample_epoch_20.png" class="center" width= 40%>
+        </div>
+    </div>
+    
+
+
+
+</body>
+</html>
