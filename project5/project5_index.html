@@ -730,6 +730,10 @@
     <h3>Part 1: Training a Single-Step Denoising UNet</h3>
 
     <h3>Implementing the UNet, Using the UNet to Train a Denoiser, and Training </h3>
+    <p> We train a UNet to take in a noisy MNIST image and predictd the clean image. 
+        The UNet consists of downsampling and upsampling blocks with skip connections. I used convolutional layers with GELU activations and BatchNorm and followed the instruction diagrams. 
+        To train the model, I add Gaussian noise to the images during each epoch and optimize using L2 loss. 
+        Below I show samples after the first and fifth epochs. We also see the performance across a range of distributions other than sigma = 0.5 which was what was trained on.</p>
     <h4> Noising Visualization</h4>
     <img src="imgs/partb/unet_results/noising_visualization.png" class="center" width= 60%>
     <img src="imgs/partb/unet_results/training_loss_curve.png" class="center" width= 50%>
