@@ -1,1 +1,2 @@
-# Berkeley CS 280A (Intro to Computer Vision and Computational Photography)
+# Berkeley CS 280A Projects 
+# (Intro to Computer Vision and Computational Photography)
